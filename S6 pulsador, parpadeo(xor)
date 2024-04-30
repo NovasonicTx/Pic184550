@@ -6,17 +6,18 @@ void main(void)
 {
     TRISDbits.RD0 = 0;
     TRISDbits.RD1 = 1;
-    LATDbits.LD0 = 0;
+    LATDbits.LATD0 = 0;
         while(1)
-            
-        if(PORTDbits.RD1 == 1)
-        {
-            LATDbits.LD0 ^= 1;
-            __delay_ms(500);
-        }
-        else
-        {
-            LATDbits.LD0 = 0;
+        {    
+            if(PORTDbits.RD1 == 1)
+            {
+                LATDbits.LD0 ^= 1;
+                __delay_ms(500);
+            }
+            else
+            {
+                LATDbits.LD0 = 0;
+            }
         }
     return;
 }
