@@ -1,0 +1,33 @@
+#include "bits.h"
+#define _XTAL_FREQ 8000000UL
+#include <xc.h>
+    
+void main(void) 
+{
+    ADCON1bits.PCFG = 15;   //cambiamos los analog por 
+    TRISA = 1;
+    TRISB = 1;
+    TRISC = 0;
+    TRISD = 0;
+    LATD = 0;
+    
+    while(PORTAbits.RA0 == 1) //boton de inicio
+    {
+        if(PORTAbits.RA1 == 0) // boton de congelar
+        {    
+            LATD = PORTB; //
+            if(LATD%2 == 0) //numero par
+            {
+                PORTCbits.RC0 = 1;
+                PORTCbits.RC1 = 0;
+            }
+            else //num impar
+            {
+                PORTCbits.RC1 = 1;
+                PORTCbits.RC0 = 0;
+            }       
+        }
+    }
+    
+    return;
+}
