@@ -2,3 +2,4 @@
 #define _XTAL_FREQ 8000000UL
 #include <xc.h>
 
+void main
