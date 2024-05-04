@@ -4,30 +4,32 @@
     
 void main(void) 
 {
-    ADCON1bits.PCFG = 15;   //cambiamos los analog por 
-    TRISA = 1;
-    TRISB = 1;
-    TRISC = 0;
-    TRISD = 0;
-    LATD = 0;
+    ADCON1bits.PCFG = 15;   //cambiamos todos los analog por digital
+    TRISA = 1; //entrada
+    TRISB = 1; // entrada
+    TRISC = 0; // salida
+    TRISD = 0; //salida
+    LATD = 0; //inicia apagado
     
     while(PORTAbits.RA0 == 1) //boton de inicio
     {
         if(PORTAbits.RA1 == 0) // boton de congelar
         {    
-            LATD = PORTB; //
+            LATD = PORTB; //salida de B sera igual a la entrada D
             if(LATD%2 == 0) //numero par
             {
-                PORTCbits.RC0 = 1;
-                PORTCbits.RC1 = 0;
+                PORTCbits.RC0 = 1; // RC0 prendera
+                PORTCbits.RC1 = 0; // RC1 apagado
             }
             else //num impar
             {
-                PORTCbits.RC1 = 1;
-                PORTCbits.RC0 = 0;
+                PORTCbits.RC1 = 1; // RC1 prendera
+                PORTCbits.RC0 = 0; // RC0 apagado
             }       
         }
     }
     
     return;
 }
+
+
