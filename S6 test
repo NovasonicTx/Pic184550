@@ -1,5 +1,25 @@
 #include "bits.h"
-#define _XTAL_FREQ 8000000UL
+#define _XTAL_FREQ 8000000UL 
 #include <xc.h>
 
-void main
+ADCON1.
+
+void main(void) 
+{
+    TRISDbits.RD0 = 0;
+    TRISDbits.RD1 = 1;
+    LATDbits.LATD0 = 0;
+        while(1)
+        {    
+            if(PORTDbits.RD1 == 1)
+            {
+                LATDbits.LD0 ^= 1;
+                __delay_ms(500);
+            }
+            else
+            {
+                LATDbits.LD0 = 0;
+            }
+        }
+    return;
+}
