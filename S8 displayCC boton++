@@ -28,6 +28,29 @@ void main(void)
                 i=0;
             }
         }
+        
+        if(PORTBbits.RB1 == 1)
+        {
+            while(PORTBbits.RB1 == 1); //codigo antirebote
+            __delay_ms(10);
+            LATD = disCC[0];
+            i=0;
+        }
+        
+        if(PORTBbits.RB2 == 1)
+        {
+            while(PORTBbits.RB2 == 1); //codigo antirebote
+            __delay_ms(10);
+                
+            i=i+2;
+            LATD = disCC[i];
+            
+            if(i>9)
+            {
+                i=i%10;
+                LATD = disCC[i];
+            }
+        }
     }          
     return;
-}     
+}   
