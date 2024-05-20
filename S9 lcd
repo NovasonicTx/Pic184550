@@ -1,0 +1,56 @@
+#include <xc.h>
+#include "h1.h"
+#define _XTAL_FREQ 8000000UL
+
+void GPIO_LCD(void);
+void LCD_Init(char);
+void Send_CMD(char);
+void Send_DATA(char);
+void Lin_Col_pos(char,char);
+void send_String(void);
+
+void main(void) 
+{
+    
+    
+}
+
+
+
+void GPIO_LCD(void)
+{
+    TRISD = 0x00;
+    LATD = 0x00;
+}
+
+void LCD_Init(void)
+{
+    GPIO_LCD();
+    __delay_ms(20);
+    Send_CMD(0x30);
+    __delay_ms(5);
+    Send_CMD(0x30);
+    __delay_ms(1);
+    Send_CMD(0x32); //4 bits
+    __delay_ms(1);
+    Send_CMD(0x28); // 2 lineas 5x8
+    Send_CMD(0x0C); // display ON
+    Send_CMD(0x01); //Borrar LCD
+    Send_CMD(0x06); //Incremento
+    __delay_ms(100);
+}
+
+void Send_CMD(char cmd)
+{
+    
+}
+
+void Send_CMD()
+{
+    
+}
+
+void Send_String(char *cadena)
+{
+    
+}
