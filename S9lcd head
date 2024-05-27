@@ -1,0 +1,15 @@
+
+#include <xc.h>
+
+#define DATA_LCD  LATD
+#define RS  LATDbits.LATD5
+#define RW  LATDbits.LATD6
+#define E   LATDbits.LATD7
+
+void GPIO_LCD(void);
+void LCD_init(void);
+void Send_CMD(char);
+void Send_DATA(char);
+void Lin_Col_pos(char, char);
+void Send_String(char, char, char *);
+void retardo_ms(uint16_t);
