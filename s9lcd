@@ -1,0 +1,85 @@
+
+#include "LCD.h"
+
+void GPIO_LCD(void)
+{
+    TRISD = 0x00;       // todos los pines del puerto D como salida
+    LATD = 0x00;        // inicializo pines como 0 logico
+}
+
+void LCD_init(void)
+{
+    GPIO_LCD();
+    retardo_ms(20);
+    Send_CMD(0x30); 
+    retardo_ms(5);
+    Send_CMD(0x30);
+    retardo_ms(1);
+    Send_CMD(0x32);// 4 bits
+    retardo_ms(1);
+    Send_CMD(0x28);// 2 Lineas 5x8
+    Send_CMD(0x0C);// Display ON
+    Send_CMD(0x01);// Borrar LCD
+    Send_CMD(0x06);// Incremento
+    retardo_ms(100);
+}
+
+void Send_CMD(char cmd)
+{
+   RW = 0; // ESCRITURA
+   RS = 0; //MODO COMANDO
+   DATA_LCD &= 0xF0;
+   DATA_LCD |= (cmd>>4)& 0x0F;     // 4 bits de mayor peso
+   E = 1;
+   E = 0;
+   retardo_ms(1);
+   DATA_LCD &= 0xF0;
+   DATA_LCD |= (cmd & 0x0F);        // 4 bits de menor peso
+   E = 1;
+   E = 0;
+   retardo_ms(1);    
+}
+
+void Send_DATA(char dato)
+{
+    RW = 0; // ESCRITURA
+    RS = 1; //MODO CARACTER
+    DATA_LCD &= 0xF0;
+    DATA_LCD |= (dato>>4)&0x0F;     // 4 bits de mayor peso
+    E = 1;
+    E = 0;
+    retardo_ms(1); 
+    DATA_LCD &= 0xF0;
+    DATA_LCD |= (dato&0x0F);        // 4 bits de menor peso
+    E = 1;
+    E = 0;
+    retardo_ms(1);    
+}
+
+void Lin_Col_pos(char Lin, char Col)
+{
+    if(Lin == 2)
+    {
+        Send_CMD(0xC0+Col);
+    }
+    else
+    {
+        Send_CMD(0x80+Col);
+    }
+}
+
+void Send_String(char Lin, char Col, char *dat)
+{
+    Lin_Col_pos(Lin, Col);
+    while(*dat)
+    {
+        Send_DATA(*dat++);
+    }
+}
+
+void retardo_ms(uint16_t N)
+{
+    for(uint16_t j = N; j>0; j--)
+        for(uint8_t k = 200; k>0; k--)
+            NOP();
+}
