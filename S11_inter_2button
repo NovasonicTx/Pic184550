@@ -1,0 +1,43 @@
+#include "h12.h"
+#include <xc.h>
+#define _XTAL_FREQ 8000000UL
+
+void EXTI_Config(void);
+
+void main(void) {
+    TRISD=3;
+    EXTI_Config();
+    ADCON1bits.PCFG = 15;
+    while(1)
+    {
+        LATDbits.LATD2 ^= 1;
+        __delay_ms(500);
+    }
+    return;
+}
+
+void EXTI_Config(void){
+    INTCONbits.INT0IF = 0;  //limpiar la bandera del evento
+    INTCONbits.INT0E = 1;   //habilito interr en pin INT0
+    
+    INTCON3bits.INT1IF = 0;  //limpiar la bandera del evento
+    INTCON3bits.INT1E = 1;   //habilito interr en pin INT0
+    
+    INTCONbits.PEIE = 1;    //habilito interr de perifericos
+    INTCONbits.GIE = 1;     //habilio interr de manera global
+    INTCON2bits.INTEDG0 = 0;//interr en pin INT0 por flanco de bajada
+    INTCON2bits.INTEDG1 = 1;
+}
+
+__interrupt() void ISR(void){
+    if(INTCONbits.INT0IF == 1)
+    {
+        LATDbits.LATD0 ^= 1;
+        INTCONbits.INT0IF = 0;  //borramos bandera de evento
+    }
+    if(INTCON3bits.INT1IF == 1)
+    {
+        LATDbits.LATD1 ^= 1;
+        INTCON3bits.INT1IF = 0;  //borramos bandera de evento
+    }
+}
