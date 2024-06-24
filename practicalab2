@@ -1,0 +1,64 @@
+#include "hp1.h"
+#include <xc.h>
+#define _XTAL_FREQ 8000000UL
+#define Flag INTCONbits.INT0IF
+
+//void TMR0_8bits(void);
+void TMR0_16bits(void);
+void config(void);
+
+void main(void) {
+    TMR0_16bits();
+    config();
+    TRISD = 0;
+    TRISE = 0;
+    LATD=1;
+    TRISB=255;
+    
+    while(1){
+        if (INTCONbits.TMR0IF == 1){
+            TMR0= 49911; //
+            INTCONbits.TMR0IF = 0;
+            LATD=LATD<<1;    
+        }
+        if (PORTD == 128){
+            __delay_ms(1000);
+            LATD=1;
+            __delay_ms(1000);
+        }
+    }
+    return;
+}
+
+void TMR0_8bits(void){
+    T0CON = 0xC7;
+    TMR0= 177.875; //10 milis
+    INTCONbits.TMR0IF = 0;
+}
+
+void TMR0_16bits(void){
+    T0CON = 0x86;
+    TMR0= 49911; //1 seg
+    INTCONbits.TMR0IF = 0;
+}
+
+void config(void){
+    ADCON1bits.PCFG=15;
+    INTCONbits.INT0IF=0;
+    INTCONbits.INT0IE=1;
+    INTCON2bits.INTEDG0=1;
+    INTCONbits.GIE=1;
+    INTCONbits.PEIE = 1;
+}
+
+void __interrupt() INT_EXT_RB0(){
+    if(Flag == 1){
+        for(int i=0; i<10; i++){
+            LATEbits.LATE1 ^=1;
+            __delay_ms(100);
+            LATEbits.LATE0 ^=1;
+            __delay_ms(100);
+        }
+        Flag = 0;
+    }
+}
